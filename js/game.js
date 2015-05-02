@@ -1,8 +1,7 @@
-
 var shape;
 var shapeM1;
-var shapeM2;
-var shapeM3;
+//var shapeM2;
+//var shapeM3;
 
 var board;
 var boardMonstar;
@@ -10,6 +9,7 @@ var score;
 var pac_color;
 var start_time;
 var time_elapsed;
+var last_time_move_m1;
 var interval;
 var lastKey;
 
@@ -17,12 +17,11 @@ window.onload = function(){
 	context = canvas.getContext("2d");
 	shape = new Object();
 	shapeM1= new Object();
-	shapeM2= new Object();
-	shapeM3= new Object();
+//	shapeM2= new Object();
+//	shapeM3= new Object();
+	last_time_move_m1 = 0;
 	Start();
-
  }
-
 
 function Start() {
 	board = new Array()
@@ -34,9 +33,7 @@ function Start() {
 	var pacman_remain = 1;
 	var monstar_remain = 1;
 	start_time= new Date();
-	
-
-	
+	//Drawing the game-board and the monster-board
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		boardMonstar[i] = new Array();
@@ -56,20 +53,22 @@ function Start() {
 			cnt--;
 		}
 	}
-
-		boardMonstar[0][0] = 1;
+	//Setting the monster's start point
+	//1st monster
+	boardMonstar[0][0] = 1;
 	shapeM1.i=0;
 	shapeM1.j=0;
-	
+/*	
+	//2nd monster
 	boardMonstar[9][0] = 1;
 	shapeM2.i=9;
 	shapeM2.j=0;
-	
+	//3rd monster
 	boardMonstar[0][9] = 1;
 	shapeM3.i=0;
 	shapeM3.j=9;
-	
-	
+*/	
+	//Event listeners for key pressing
 	keysDown = {};
 	addEventListener("keydown", function (e) {
 		keysDown[e.keyCode] = true;
@@ -77,6 +76,7 @@ function Start() {
 	addEventListener("keyup", function (e) {
 		keysDown[e.keyCode] = false;
 	}, false);
+	//Setting the game interval
 	interval=setInterval(UpdatePosition, 200);
 }
 
@@ -95,7 +95,6 @@ function GetKeyPressed() {
 	}
 }
 
-
 function Draw() {
 	canvas.width=canvas.width;
 	lblScore.value = score;
@@ -106,16 +105,21 @@ function Draw() {
 			var center = new Object();
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
-			if (board[i][j] == 2) { 
-				if (boardMonstar[i][j] == 1) { //monstar eats packman
-						context.beginPath();
-						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
-						context.fillStyle = "red"; //color 
-						context.fill();			
+			if (board[i][j] == 2)
+			{ 
+				if (boardMonstar[i][j] == 1)
+				{ //Monster eats Pacman
+					context.beginPath();
+					context.arc(center.x, center.y, 15, 0, 2 * Math.PI);
+					context.fillStyle = "red";
+					context.fill();			
 					window.clearInterval(interval);
 					window.alert("Game Lost");
-				} else{
+				}
+				else
+				{
 					//drawPacman(i,j, 0.15 + Math.PI,1.85 + Math.PI ,5,-15);
+					//Drawing Pacman according the movement
 					if(lastKey==1) //up
 					{
 						drawPacman(i,j, 1.65 ,1.35 ,15,5);
@@ -144,27 +148,39 @@ function Draw() {
 				context.fillStyle = "black"; //color 
 				context.fill();
 				*/
-			} else if (board[i][j] == 1) {
-					if (boardMonstar[i][j] == 1){
+			} 
+			else
+			{
+				if (board[i][j] == 1)
+				{//Drawing the points
+					if (boardMonstar[i][j] == 1)
+					{//Monster at this point
 						context.beginPath();
 						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
 						context.fillStyle = "red"; //color 
 						context.fill(); 
-					}else{
+					}
+					else
+					{//No monster at this point
 						context.beginPath();
 						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
 						context.fillStyle = "black"; //color 
 						context.fill();
-				}
-			} else if (boardMonstar[i][j] == 1){
+					}
+				} 
+				else
+				{
+					if (boardMonstar[i][j] == 1)//Only monster at this spot
+					{
 						context.beginPath();
 						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
 						context.fillStyle = "red"; //color 
 						context.fill();
+					}
+				}
 			}
 		}
 	}
-
 	//code here
 }
 
@@ -173,17 +189,18 @@ function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
 	var center = new Object();
 	center.x = i * 60 + 30;
 	center.y = j * 60 + 30;
+	//Pacman drawing
 	context.beginPath();
 	context.arc(center.x, center.y, 30, startMouth * Math.PI, endMouth * Math.PI); // half circle
 	context.lineTo(center.x, center.y);
 	context.fillStyle = pac_color; //color 
 	context.fill();
+	//Eye drawing
 	context.beginPath();
 	context.arc(center.x + eyeX, center.y + eyeY, 5, 0, 2 * Math.PI); // half circle
 	context.fillStyle = "black"; //color 
 	context.fill();
 }
-
 
 function UpdatePosition() {
 	board[shape.i][shape.j]=0;
@@ -229,17 +246,25 @@ function UpdatePosition() {
 	
 	board[shape.i][shape.j]=2;
 	
-	monstarMoveMenhatten(shapeM1);
-	monstarMoveMenhatten(shapeM2);
-	monstarMoveMenhatten(shapeM3);
+//	monstarMoveMenhatten(shapeM1);
+//	monstarMoveMenhatten(shapeM2);
+//	monstarMoveMenhatten(shapeM3);
 	
 	var currentTime=new Date();
 	time_elapsed=(currentTime-start_time)/1000;
-	if(score>=20&&time_elapsed<=10)
+	//Setting the speed of monster movement
+	if (time_elapsed - last_time_move_m1 >= 0.5)
+	{
+		monstarMoveMenhatten(shapeM1);
+		last_time_move_m1 = time_elapsed;
+	}
+	//Checking score-on-time
+	if(score>=10&&time_elapsed<=10)
 	{
 		pac_color="green";
 	}
-	if(score==50)
+	//Checking game score
+	if(score==25)
 	{
 		window.clearInterval(interval);
 		window.alert("Game completed");
