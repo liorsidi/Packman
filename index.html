@@ -1,19 +1,102 @@
-<!DOCTYPE html>
+<!DOCtype html>
 <html>
     
     <head>
+		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script src="js/game.js"></script>
-		
+		<script src="js/jquery.js"></script>
 	</head>
     
-    <body>SCORE:
-        <input id="lblScore" type="text" />
-        <br/>
-        TIME:
-        <input id="lblTime" type="text1" />
-        <br/>
-        <canvas id="canvas" height="600" width="600"></canvas>
-        
+    <body>
+		<header>
+			Ugly Pacman v1.0
+		</header>
+		
+		<nav>
+		<a onclick="ShowSection('register')" href="#">Register</a>
+		<br>
+		<a onclick="ShowSection('login')" href="#">Login</a>
+		<br>
+		<a onclick="ShowSection('game_screen')" href="#">Game!</a>
+		</nav>
+		
+		<content>
+			
+			<div id="welcome">
+			 <p><input id="wel_reg_btn" type = "button" value = "Register" onclick="ShowSection('register')"> </p>
+			 <p><input id="wel_log_btn" type = "button" value = "Login" onclick="ShowSection('login')"></p>
+			</div>
+			
+			<div id="register">
+				<h1>Registration Page</h1>
+				<!--action="mailto:belity@post.bgu.ac.il"-->
+				<form id="reg_form" onsubmit="return regValidate()" method="post">
+					<table>
+						<tr>
+							<td><label><strong>UserName:</strong></label></td>
+							<td><input id="reg_username" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Password:</strong></label></td>
+							<td><input id="reg_password" type="password" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>First Name:</label></td>
+							<td><input id="reg_fname" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Last Name:</strong></label></td>
+							<td><input id="reg_lname" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Email:</strong></label></td>
+							<td><input id="reg_email" type="email" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Date of Birth:</strong></label></td>
+							<td>
+								day-
+								<input id="reg_day" type="number" min="1" max="31" >
+								month-
+								<input id="reg_month" type="number" min="1" max="12" >
+								year-
+								<input id="reg_year" type="number" min="1900" max="2015" >
+							</td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="Submit"></td>
+							<td><input type="reset" value="Clear Entries"></td>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			
+			<div id="login">
+				<h1>Login Page</h1>
+				<p><strong>UserName: </strong>
+				<input id = "log_username" type = "text" size = "25"></p>
+				<p><strong>Password:</strong> 
+				<input id = "log_password" type = "password" size = "25"></p>
+				<p><input id="log_btn" type = "button" value = "Login" onclick="ShowSection('game_screen')"></p>
+			</div>
+			
+			<div id="game_screen">
+				<strong>Player:</strong>
+				<label id="game_player" >player1</label>
+				<section id="game_data" vertical-align="right">
+					Score:
+					<input id="lblScore" type="text" width="15"/>
+					Time:
+					<input id="lblTime" type="text" width="15"/>
+					<br/>
+				</section>
+				<canvas id="canvas" height="500" width="500"></canvas>
+			</div>
+		</content>
+		<footer>
+			Please call lior sidi!
+		</footer>
     </body>
 
 </html>
