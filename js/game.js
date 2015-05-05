@@ -2,7 +2,6 @@ var shape;
 var shapeM1;
 //var shapeM2;
 //var shapeM3;
-
 var board;
 var boardMonstar;
 var score;
@@ -11,7 +10,8 @@ var start_time;
 var time_elapsed;
 var last_time_move_m1;
 var interval;
-var lastKey;
+var lastKey = 4;
+var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
@@ -20,12 +20,13 @@ window.onload = function(){
 //	shapeM2= new Object();
 //	shapeM3= new Object();
 	last_time_move_m1 = 0;
-	Start();
+	ShowSection("welcome");
+//	Start();
  }
 
 function Start() {
-	board = new Array()
-	boardMonstar = new Array()
+	board = new Array();
+	boardMonstar = new Array();
 	score = 0;
 	pac_color="yellow";
 	var cnt = 100;
@@ -33,7 +34,7 @@ function Start() {
 	var pacman_remain = 1;
 	var monstar_remain = 1;
 	start_time= new Date();
-	//Drawing the game-board and the monster-board
+	//Creating the game-board and the monster-board
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		boardMonstar[i] = new Array();
@@ -97,20 +98,22 @@ function GetKeyPressed() {
 
 function Draw() {
 	canvas.width=canvas.width;
+	//game_player.innerText="player1";
+	document.getElementById("game_player").innerText="player2";
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
 	//var k = GetKeyPressed();
 	for (var i = 0; i < 10; i++) {
 		for (var j = 0; j < 10; j++) {
 			var center = new Object();
-			center.x = i * 60 + 30;
-			center.y = j * 60 + 30;
+			center.x = i * 50 + 20;
+			center.y = j * 50 + 20;
 			if (board[i][j] == 2)
 			{ 
 				if (boardMonstar[i][j] == 1)
 				{ //Monster eats Pacman
 					context.beginPath();
-					context.arc(center.x, center.y, 15, 0, 2 * Math.PI);
+					context.arc(center.x, center.y, 10, 0, 2 * Math.PI);
 					context.fillStyle = "red";
 					context.fill();			
 					window.clearInterval(interval);
@@ -156,14 +159,14 @@ function Draw() {
 					if (boardMonstar[i][j] == 1)
 					{//Monster at this point
 						context.beginPath();
-						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
+						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
 						context.fillStyle = "red"; //color 
 						context.fill(); 
 					}
 					else
 					{//No monster at this point
 						context.beginPath();
-						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
+						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
 						context.fillStyle = "black"; //color 
 						context.fill();
 					}
@@ -173,7 +176,7 @@ function Draw() {
 					if (boardMonstar[i][j] == 1)//Only monster at this spot
 					{
 						context.beginPath();
-						context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // half circle
+						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
 						context.fillStyle = "red"; //color 
 						context.fill();
 					}
@@ -187,17 +190,17 @@ function Draw() {
 function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
 	context.beginPath();
 	var center = new Object();
-	center.x = i * 60 + 30;
-	center.y = j * 60 + 30;
+	center.x = i * 50 + 20;
+	center.y = j * 50 + 20;
 	//Pacman drawing
 	context.beginPath();
-	context.arc(center.x, center.y, 30, startMouth * Math.PI, endMouth * Math.PI); // half circle
+	context.arc(center.x, center.y, 20, startMouth * Math.PI, endMouth * Math.PI); // half circle
 	context.lineTo(center.x, center.y);
 	context.fillStyle = pac_color; //color 
 	context.fill();
 	//Eye drawing
 	context.beginPath();
-	context.arc(center.x + eyeX, center.y + eyeY, 5, 0, 2 * Math.PI); // half circle
+	context.arc(center.x + eyeX, center.y + eyeY, 3, 0, 2 * Math.PI); // half circle
 	context.fillStyle = "black"; //color 
 	context.fill();
 }
@@ -287,4 +290,70 @@ function monstarMoveMenhatten(m){
 		}else m.j--;
 	}
 	boardMonstar[m.i][m.j]=1;
+}
+
+function ShowSection(id)
+{
+	//hide all sections
+	var welcome = document.getElementById('welcome');
+	welcome.style.visibility="hidden";
+	var register = document.getElementById('register');
+	register.style.visibility="hidden";
+	var login = document.getElementById('login');
+	login.style.visibility="hidden";
+	var game_screen = document.getElementById('game_screen');
+	game_screen.style.visibility="hidden";
+	
+	//show only one section
+	var selected = document.getElementById(id);
+	selected.style.visibility="visible";
+	if (id == "game_screen")
+		Start();
+}
+
+function regValidate()
+{
+//Validation of the registration form
+	var user = $("#reg_username");
+	var pass = $("#reg_password");
+	var fname = $("#reg_fname");
+	var lname = $("#reg_lname");
+	var email = $("#reg_email");
+	var bday = $("#reg_day");
+	var bmonth = $("#reg_month");
+	var byear = $("#reg_year");
+	
+	var errorMsg = "";
+	var notSpaceRegex = /\s/;
+	var containNumRegex = /\d/;
+	var containCharRegex = /[a-zA-Z]/;
+	var validEmailRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9_.-]+[a-zA-Z0-9_-]+@[a-zA-Z0-9]+[a-zA-Z0-9.-]+[a-zA-Z0-9]+.[a-z]{2,4}$/;
+	
+	if ((user.val() == "") || (notSpaceRegex.test(user.val())))
+		errorMsg += "User Name must be filled without spaces!\n";
+	if (containNumRegex.test(user.val()))
+		errorMsg += "User Name must not contain digits!\n";
+	if ((pass.val()).length < 8)
+		errorMsg += "Password length should be at least 8!\n";
+	if ((!containCharRegex.test(pass.val())) || (!containNumRegex.test(pass.val())))
+		errorMsg += "Password must contain characters AND numbers!";
+	if ((fname.val() == "") || (containNumRegex.test(fname.val())))
+		errorMsg += "Invalid First Name!";
+	if ((lname.val() == "") || (containNumRegex.test(lname.val())))
+		errorMsg += "Invalid Last Name!";
+	if ((bday.val() == "") || (bmonth.val() == "") || (byear.val() == ""))
+		errorMsg += "Invalid Birth Day!";
+	if (email.val() == "")
+		errorMsg += "Must fill Email!";
+	if (!(validEmailRegex.test(email.val())))
+		errorMsg += "Invalid Email!";
+
+	if (errorMsg.length > 0){
+		alert(errorMsg);
+		return false;
+	}
+	else{
+		usersData.push({userName:user.val(),password:pass.val()});
+		return true;
+	}
 }
