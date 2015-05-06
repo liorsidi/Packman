@@ -12,6 +12,7 @@ var last_time_move_m1;
 var interval;
 var lastKey = 4;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
+var curUser = "guest";
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
@@ -336,17 +337,17 @@ function regValidate()
 	if ((pass.val()).length < 8)
 		errorMsg += "Password length should be at least 8!\n";
 	if ((!containCharRegex.test(pass.val())) || (!containNumRegex.test(pass.val())))
-		errorMsg += "Password must contain characters AND numbers!";
+		errorMsg += "Password must contain characters AND numbers!\n";
 	if ((fname.val() == "") || (containNumRegex.test(fname.val())))
-		errorMsg += "Invalid First Name!";
+		errorMsg += "Invalid First Name!\n";
 	if ((lname.val() == "") || (containNumRegex.test(lname.val())))
-		errorMsg += "Invalid Last Name!";
+		errorMsg += "Invalid Last Name!\n";
 	if ((bday.val() == "") || (bmonth.val() == "") || (byear.val() == ""))
-		errorMsg += "Invalid Birth Day!";
+		errorMsg += "Invalid Birth Day!\n";
 	if (email.val() == "")
-		errorMsg += "Must fill Email!";
+		errorMsg += "Must fill Email!\n";
 	if (!(validEmailRegex.test(email.val())))
-		errorMsg += "Invalid Email!";
+		errorMsg += "Invalid Email!\n";
 
 	if (errorMsg.length > 0){
 		alert(errorMsg);
@@ -357,3 +358,25 @@ function regValidate()
 		return true;
 	}
 }
+
+function logValidate(){
+	var user = $("#log_username");
+	var pass = $("#log_password");
+	var isValid = false;
+	
+	for(var i = 0; i < usersData.length; i++){
+		if(usersData[i].userName == user.val() && usersData[i].password == pass.val())
+			isValid=true;
+	}
+	if (isValid){
+		curUser = user.val();
+		ShowSection('game_screen');
+		return true;
+	}
+	alert("Invalid Username or Password.");
+	return false;
+}
+
+
+
+
