@@ -304,6 +304,8 @@ function ShowSection(id)
 	login.style.visibility="hidden";
 	var game_screen = document.getElementById('game_screen');
 	game_screen.style.visibility="hidden";
+	var game_setting = document.getElementById('game_setting');
+	game_setting.style.visibility="hidden";
 	
 	//show only one section
 	var selected = document.getElementById(id);

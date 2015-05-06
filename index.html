@@ -9,15 +9,16 @@
     
     <body>
 		<header>
-			Ugly Pacman v1.2
+			Ugly Pacman v1.1
 		</header>
-		
 		<nav>
-		<a onclick="ShowSection('register')" href="#">Register</a>
+		<a onclick="ShowSection('welcome')" href="#">home</a>
+		<nav>
+		<a onclick="ShowSection('register')" href="#">Register </a>
 		<br>
 		<a onclick="ShowSection('login')" href="#">Login</a>
 		<br>
-		<a onclick="ShowSection('game_screen')" href="#">Game!</a>
+		<a onclick="ShowSection('game_setting')" href="#">Game!</a>
 		</nav>
 		
 		<content>
@@ -90,6 +91,10 @@
 				</form>
 			</div>
 			
+			<div id="game_setting">
+				<strong>Player:</strong>
+			</div>
+
 			<div id="game_screen">
 				<strong>Player:</strong>
 				<label id="game_player" >player1</label>
