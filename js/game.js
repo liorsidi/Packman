@@ -13,11 +13,14 @@ var interval;
 var lastKey = 4;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 var curUser = "guest";
+var imgRobo;
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
 	shape = new Object();
 	shapeM1= new Object();
+	imgRobo = new Image();
+	imgRobo.src = 'image/roboSwat.jpg';
 //	shapeM2= new Object();
 //	shapeM3= new Object();
 	last_time_move_m1 = 0;
@@ -114,8 +117,9 @@ function Draw() {
 				if (boardMonstar[i][j] == 1)
 				{ //Monster eats Pacman
 					context.beginPath();
-					context.arc(center.x, center.y, 10, 0, 2 * Math.PI);
-					context.fillStyle = "red";
+					//context.arc(center.x, center.y, 10, 0, 2 * Math.PI);
+					//context.fillStyle = "red";
+					context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
 					context.fill();			
 					window.clearInterval(interval);
 					window.alert("Game Lost");
@@ -160,15 +164,21 @@ function Draw() {
 					if (boardMonstar[i][j] == 1)
 					{//Monster at this point
 						context.beginPath();
-						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-						context.fillStyle = "red"; //color 
+						//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
+						//context.fillStyle = "red"; //color 
+						
+						context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
+						context.fill();
+					
 						context.fill(); 
 					}
 					else
 					{//No monster at this point
 						context.beginPath();
 						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-						context.fillStyle = "black"; //color 
+						context.rect(center.x-15, center.y-15, 30 , 30); // rect
+						context.rect(center.x-7.5, center.y-20, 15 , 5); // rect
+						context.fillStyle = "red"; //color 
 						context.fill();
 					}
 				} 
@@ -177,8 +187,12 @@ function Draw() {
 					if (boardMonstar[i][j] == 1)//Only monster at this spot
 					{
 						context.beginPath();
-						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-						context.fillStyle = "red"; //color 
+						//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
+						//context.fillStyle = "red"; //color 
+						
+						context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
+						context.fill();
+					
 						context.fill();
 					}
 				}
