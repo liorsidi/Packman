@@ -31,7 +31,7 @@
 			<div id="register">
 				<h1>Registration Page</h1>
 				<!--action="mailto:belity@post.bgu.ac.il"-->
-				<form id="reg_form" onsubmit="return regValidate()" method="post">
+				<form id="reg_form" method="post">
 					<table>
 						<tr>
 							<td><label><strong>UserName:</strong></label></td>
@@ -65,7 +65,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><input type="submit" value="Submit"></td>
+							<td><input type="button" onclick="return regValidate()" value="Submit"></td>
 							<td><input type="reset" value="Clear Entries"></td>
 						</tr>
 					</table>
@@ -74,7 +74,7 @@
 			
 			<div id="login">
 				<h1>Login Page</h1>
-				<form id="log_form" onsubmit="logValidate()" method="post">
+				<form id="log_form" method="post">
 					<table>
 						<tr>
 							<td><label><strong>UserName:</strong></label></td>
@@ -85,7 +85,8 @@
 							<td><input id="log_password" type="password" ></td>
 						</tr>
 						<tr>
-							<td><input type="submit" value="Login!"></td>
+						<!--	<td><input type="submit" value="Login!"></td> -->
+						<td><input type="button" onclick="return logValidate()" value="Login!"></td>
 						</tr>
 					</table>
 				</form>
