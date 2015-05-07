@@ -1,9 +1,11 @@
 var shape;
 var shapeM1;
-var imgRobo;
+var imgM1;
+var shapeM2;
+var imgM2;
+var shapeM3;
+var imgM3;
 
-//var shapeM2;
-//var shapeM3;
 var board;
 var boardMonstar;
 var score;
@@ -11,6 +13,8 @@ var pac_color;
 var start_time;
 var time_elapsed;
 var last_time_move_m1;
+var last_time_move_m2;
+var last_time_move_m3;
 
 var interval;
 var lastKey = 4;
@@ -18,8 +22,13 @@ var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}]
 var curUser = "guest";
 var food_interval;
 
-var imgFood;
-var shapeFood;
+var imgFood1;
+var shapeFood1;
+var imgFood2;
+var shapeFood2;
+var imgFood3;
+var shapeFood4;
+
 var board_food_surprise;
 var start_time_move_food=5;
 var last_time_move_food;
@@ -27,20 +36,52 @@ var food_timer_frequent = 20;
 var food_timer_set = 200;
 var food_timer;
 
-var brickColor = ["Red","blue","green","gold"];
+var brickColor;
+
+var speed = 1;
+var size = 10;
+var AmountParts;
+var timeGame;
+var Level;
+	
+var isM1;
+var isM2;
+var isM3;
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
 	shape = new Object();
+
 	shapeM1= new Object();
-	shapeFood = new Object();
-	imgRobo = new Image();
-	imgRobo.src = 'image/roboSwat.jpg';
-	imgFood = new Image();
-	imgFood.src = 'image/lordBussiness.jpg';
-//	shapeM2= new Object();
-//	shapeM3= new Object();
+	shapeM2= new Object();
+	shapeM3= new Object();
+	
+	shapeFood1 = new Object();
+	shapeFood2 = new Object();
+	shapeFood3 = new Object();
+	
+	imgM1 = new Image();
+	imgM1.src = 'image/badCop.jpg';
+	imgM2 = new Image();
+	imgM2.src = 'image/lordBussiness.jpg';
+	imgM3 = new Image();
+	imgM3.src = 'image/roboSwat.jpg';
+	
+	imgFood1 = new Image();
+	imgFood1.src = 'image/cup.jpg';
+	imgFood2 = new Image();
+	imgFood2.src = 'image/kraglee.jpg';
+	imgFood3 = new Image();
+	imgFood3.src = 'image/PieceOfResistance.jpg';
+	
 	last_time_move_m1 = 0;
+	last_time_move_m2 = 0;
+	last_time_move_m3 = 0;
+	
+	
+	
+	
+	
 	
 	food_timer = food_timer_set;
 	ShowSection("welcome");
@@ -53,21 +94,46 @@ function Start() {
 	board_food_surprise = new Array();
 	score = 0;
 	pac_color="yellow";
-	var cnt = 100;
-	var food_remain = 50;
+	var cnt = 10*size;
+	
+	timeGame = $("#set_time").val();
+	Level = $("#set_lego").val();
+	AmountParts = $("#set_lego").val();
+	var colorPart5 = $("#set_5pts").val();
+	var colorPart15 = $("#set_15pts").val();
+	var colorPart25 = $("#set_25pts").val();
+	
+	isM1 = $("#set_mon1").is(':checked');
+	isM2 = $("#set_mon2").is(':checked');
+	isM3 = $("#set_mon3").is(':checked');
+	
+	brickColor = ["pink",colorPart5,colorPart15,colorPart25,"gold"];
+	var f5_remain = Math.floor(0.5*(AmountParts/10)*size);
+	var f15_remain = Math.floor(0.3*(AmountParts/10)*size);
+	var f25_remain = Math.floor(0.2*(AmountParts/10)*size);
+	var food_remain = f25_remain+f15_remain+f5_remain;
+	
 	var pacman_remain = 1;
-	var monstar_remain = 1;
 	start_time= new Date();
 	//Creating the game-board and the monster-board
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 1*size; i++) {
 		board[i] = new Array();
 		boardMonstar[i] = new Array();
 		board_food_surprise[i] = new Array();
-		for (var j = 0; j < 10; j++) {
+		for (var j = 0; j < 1*size; j++) {
 			var randomNum = Math.random();
 			if (randomNum <= 1.0 * food_remain / cnt) {
 				food_remain--;
-				board[i][j] = 2;
+				if (randomNum <= 1.0 * f5_remain / ((AmountParts/10)*size)) {
+					board[i][j] = 2;
+					f5_remain--;
+				}else if (randomNum <= 1.0 * f15_remain / ((AmountParts/10)*size)) {
+					board[i][j] = 3;
+					f15_remain--;
+				}else if (randomNum <= 1.0 * f25_remain / ((AmountParts/10)*size)) {
+					board[i][j] = 4;
+					f15_remain--;
+					}
 			} else if ((randomNum < 1.0 * (pacman_remain + food_remain) / cnt)) {
 				shape.i=i;
 				shape.j=j;
@@ -80,10 +146,27 @@ function Start() {
 		}
 	}
 	//Setting the monster's start point
-	//1st monster
-	boardMonstar[0][0] = 1;
-	shapeM1.i=0;
-	shapeM1.j=0;
+
+	
+	if (isM1){//badcop - smart + fast
+		boardMonstar[0][0] = 1;
+		shapeM1.i=0;
+		shapeM1.j=0;
+	}	
+	
+	if (isM2){//badcop - smart + fast
+		boardMonstar[0][size-1] = 1;
+		shapeM2.i=0;
+		shapeM2.j=size-1;
+	}	
+	
+	if (isM3){//badcop - smart + fast
+		boardMonstar[size-1][0] = 1;
+		shapeM3.i=size-1;
+		shapeM3.j=0;
+	}	
+	
+	
 /*	
 	//2nd monster
 	boardMonstar[9][0] = 1;
@@ -103,7 +186,7 @@ function Start() {
 		keysDown[e.keyCode] = false;
 	}, false);
 	//Setting the game interval
-	interval=setInterval(UpdatePosition, 200);
+	interval=setInterval(UpdatePosition, 200*speed);
 }
 
 function GetKeyPressed() {
@@ -141,25 +224,23 @@ function Draw() {
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
 	//var k = GetKeyPressed();
-	for (var i = 0; i < 10; i++) {
-		for (var j = 0; j < 10; j++) {
+	for (var i = 0; i < 1*size; i++) {
+		for (var j = 0; j < 1*size; j++) {
 			var center = new Object();
 			center.x = i * 50 + 20;
 			center.y = j * 50 + 20;
-			var noDrawYet = true;
+			var Mimg = checkWhichMonsterIs(i,j);
 			if ((boardMonstar[i][j]==1)&&(board[i][j] == 1))
 			{
-				//Mimg = getRelevantMonstarImg(i,j);
-				context.drawImage(imgRobo,center.x-20,center.y-20,45,45);		
+				
+				context.drawImage(Mimg,center.x-20,center.y-20,45,45);		
 				finish();
-			
 				window.alert("Game Lost");
 				continue;
 			}
-			if ((boardMonstar[i][j]==1)&&(noDrawYet))
+			if ((boardMonstar[i][j]==1))
 			{
-				//Mimg = getRelevantMonstarImg(i,j);
-				context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
+				context.drawImage(Mimg,center.x-20,center.y-20,45,45);
 				continue;
 			}
 			if (board[i][j] == 1){
@@ -289,6 +370,21 @@ function Draw() {
 	//code here
 }
 
+function checkWhichMonsterIs(i,j){
+	if(isM1){
+		if((shapeM1.i==i)&&(shapeM1.j==j)) return imgM1;
+	}
+	if(isM2){
+		if((shapeM2.i==i)&&(shapeM2.j==j)) return imgM2;
+	}
+	if(isM3) { 
+		if((shapeM3.i==i)&&(shapeM3.j==j)) return imgM3;
+	}
+	return imgM3;
+
+}
+				
+				
 function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
 	context.beginPath();
 	var center = new Object();
@@ -346,45 +442,53 @@ function UpdatePosition() {
 	
 	if(board[shape.i][shape.j]==2)
 	{
-		score++;
+		score=score+5;
 	}
 	if(board[shape.i][shape.j]==3)
 	{
-		score++;
+		score=score+15;
 	}
 	if(board[shape.i][shape.j]==4)
 	{
-		score++;
+		score=score+25;
 	}
 	
 	if(board_food_surprise[shape.i][shape.j]==1)
 	{
-		score=score+100;
+		score=score+30;
 		food_timer=0;
 		UpdateFoodPosition;
 	}
 	
 	board[shape.i][shape.j]=1;
 	
-//	monstarMoveMenhatten(shapeM1);
-//	monstarMoveMenhatten(shapeM2);
-//	monstarMoveMenhatten(shapeM3);
-	
+
 	var currentTime=new Date();
 	time_elapsed=(currentTime-start_time)/1000;
 	//Setting the speed of monster movement
-	if (time_elapsed - last_time_move_m1 >= 0.5)
+	if ((time_elapsed - last_time_move_m1 >= 0.5)&&(isM1))
 	{
 		monstarMoveMenhatten(shapeM1);
 		last_time_move_m1 = time_elapsed;
 	}
 	
+	if ((time_elapsed - last_time_move_m2 >= 0.5)&&(isM2))
+	{
+		monstarMoveMenhatten(shapeM2);
+		last_time_move_m2 = time_elapsed;
+	}
+		if ((time_elapsed - last_time_move_m3 >= 0.5)&&(isM3))
+	{
+		monstarMoveStupid(shapeM3);
+		last_time_move_m3 = time_elapsed;
+	}
+	
 	//Setting the speed of food movement
 	if ((time_elapsed>=start_time_move_food)&&(food_timer==food_timer_set))
 	{
-		shapeFood.i = Math.floor((Math.random() * 9)); 
-		shapeFood.j = Math.floor((Math.random() * 9));
-		food_interval=setInterval(UpdateFoodPosition, 800);
+		shapeFood1.i = Math.floor((Math.random() * (size-1))); 
+		shapeFood1.j = Math.floor((Math.random() * (size-1)));
+		food_interval=setInterval(UpdateFoodPosition, 800*speed);
 		food_timer--;
 	}
 
@@ -410,15 +514,15 @@ function UpdateFoodPosition(){
 
 	if (food_timer==0)
 		{
-			board_food_surprise[shapeFood.i][shapeFood.j]=0;
-			shapeFood.i = Math.floor((Math.random() * 9)); 
-			shapeFood.j = Math.floor((Math.random() * 9));
+			board_food_surprise[shapeFood1.i][shapeFood1.j]=0;
+			shapeFood1.i = Math.floor((Math.random() * (size-1))); 
+			shapeFood1.j = Math.floor((Math.random() * (size-1)));
 			food_timer = food_timer_set;
 			start_time_move_food = time_elapsed+food_timer_frequent;
 			window.clearInterval(food_interval);
 			
 		}else {
-			foodMoveMenhatten(shapeFood);
+			foodMoveMenhatten(shapeFood1);
 			food_timer--;
 		}
 
@@ -427,6 +531,9 @@ function UpdateFoodPosition(){
 
 function monstarMoveMenhatten(m){
 	boardMonstar[m.i][m.j]=0;
+	mi=m.i;
+	mj=m.j;
+
 	if (Math.abs(shape.i-m.i)>Math.abs(shape.j-m.j)){
 		if (shape.i-m.i > 0){
 			m.i++;
@@ -436,6 +543,38 @@ function monstarMoveMenhatten(m){
 			m.j++;
 		}else m.j--;
 	}
+	if (boardMonstar[m.i][m.j]==1){
+		boardMonstar[mi][mj]==1;
+		m.i=mi;
+		m.j=mj;
+	}else boardMonstar[m.i][m.j]==1;
+}
+
+function monstarMoveStupid(m){
+	boardMonstar[m.i][m.j]=0;
+	mi=m.i;
+	mj=m.j;
+	var r = Math.random();
+	if ((r<0.25)&&(m.i>0)){
+		m.i--;
+		
+	}else
+	if ((r<0.5)&&(m.i<size-1)){
+		m.i++;
+		
+	}else
+	if ((r<0.75)&&(m.j>0)){
+		m.j--;
+		
+	}else
+	if (m.j<size-1){
+		m.j++;
+		
+	}
+	if (boardMonstar[m.i][m.j]==1){
+		boardMonstar[mi][mj]==1;
+	}else boardMonstar[m.i][m.j]==1;	
+	
 	boardMonstar[m.i][m.j]=1;
 }
 
@@ -444,11 +583,11 @@ function foodMoveMenhatten(m){
 	if (Math.abs(shape.i-m.i)>Math.abs(shape.j-m.j)){
 		if ((shape.i-m.i > 0) && (m.i>0))
 		{ m.i--;
-		}else if (m.i<9) m.i++;
+		}else if (m.i<size-1) m.i++;
 	
 	}else { if ((shape.j-m.j > 0)&&(m.j>0)){
 			m.j--;
-		}else if (m.j<9) 
+		}else if (m.j<size-1) 
 			m.j++;
 			}
 	
