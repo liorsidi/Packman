@@ -13,12 +13,12 @@
 		</header>
 		<nav>
 		<a onclick="ShowSection('welcome')" href="#">home</a>
-		<nav>
+		<br>
 		<a onclick="ShowSection('register')" href="#">Register </a>
 		<br>
 		<a onclick="ShowSection('login')" href="#">Login</a>
 		<br>
-		<a onclick="ShowSection('game_setting')" href="#">Game!</a>
+		<a onclick="ShowSection('game_setting')" href="#">Settings</a>
 		</nav>
 		
 		<content>
@@ -93,7 +93,37 @@
 			</div>
 			
 			<div id="game_setting">
-				<a onclick="ShowSection('game_screen')" href="#">Play!</a>
+				<h1>Game Settings</h1>
+				<form id="setting_form">
+					<table>
+						<tr>
+							<td><label><strong>Number of Lego parts:</strong></label></td>
+							<td><input id="set_lego" type="range" min="50" max="90" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Lego colors:</strong></label></td>
+							<td><label>5 Points-</label></td>
+							<td><input id="set_5pts" type="color" value="#26D720"></td>
+							<td><label>15 Points-</label></td>
+							<td><input id="set_15pts" type="color" value="#2073D7"></td>
+							<td><label>25 Points-</label></td>
+							<td><input id="set_25pts" type="color" value="#8B3BBA"></td>
+						</tr>
+						<tr>
+							<td><label><strong>Game time:</strong></label></td>
+							<td><input id="set_time" type="range" min="60" max="180" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Choose monsters:</strong></label></td>
+							<td><input id="set_mon1" type="checkbox"><img src="image/badCop.jpg" style="height:80%;"/></td>
+							<td><input id="set_mon2" type="checkbox"><img src="image/lordBussiness.jpg" style="height:80%;"/></td>
+							<td><input id="set_mon3" type="checkbox"><img src="image/roboSwat.jpg" style="height:80%;"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" onclick="return settingValidate()" value="Play Game"><td>
+						<tr>
+					</table>
+				</form>				
 			</div>
 
 			<div id="game_screen">
