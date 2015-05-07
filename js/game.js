@@ -1,5 +1,7 @@
 var shape;
 var shapeM1;
+var imgRobo;
+
 //var shapeM2;
 //var shapeM3;
 var board;
@@ -9,21 +11,38 @@ var pac_color;
 var start_time;
 var time_elapsed;
 var last_time_move_m1;
+
 var interval;
 var lastKey = 4;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 var curUser = "guest";
-var imgRobo;
+var food_interval;
+
+var imgFood;
+var shapeFood;
+var board_food_surprise;
+var start_time_move_food=5;
+var last_time_move_food;
+var food_timer_frequent = 20;
+var food_timer_set = 200;
+var food_timer;
+
+var brickColor = ["Red","blue","green","gold"];
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
 	shape = new Object();
 	shapeM1= new Object();
+	shapeFood = new Object();
 	imgRobo = new Image();
 	imgRobo.src = 'image/roboSwat.jpg';
+	imgFood = new Image();
+	imgFood.src = 'image/lordBussiness.jpg';
 //	shapeM2= new Object();
 //	shapeM3= new Object();
 	last_time_move_m1 = 0;
+	
+	food_timer = food_timer_set;
 	ShowSection("welcome");
 //	Start();
  }
@@ -31,6 +50,7 @@ window.onload = function(){
 function Start() {
 	board = new Array();
 	boardMonstar = new Array();
+	board_food_surprise = new Array();
 	score = 0;
 	pac_color="yellow";
 	var cnt = 100;
@@ -42,16 +62,17 @@ function Start() {
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		boardMonstar[i] = new Array();
+		board_food_surprise[i] = new Array();
 		for (var j = 0; j < 10; j++) {
 			var randomNum = Math.random();
 			if (randomNum <= 1.0 * food_remain / cnt) {
 				food_remain--;
-				board[i][j] = 1;
+				board[i][j] = 2;
 			} else if ((randomNum < 1.0 * (pacman_remain + food_remain) / cnt)) {
 				shape.i=i;
 				shape.j=j;
 				pacman_remain--;
-				board[i][j] = 2;
+				board[i][j] = 1;
 			} else {
 				board[i][j] = 0;
 			}
@@ -100,6 +121,19 @@ function GetKeyPressed() {
 	}
 }
 
+function drawFood(center,f){
+	context.beginPath();
+	//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
+	context.rect(center.x-15, center.y-15, 30 , 30); // rect
+	context.rect(center.x-7.5, center.y-20, 15 , 5); // rect
+	context.fillStyle = brickColor[f]; //color 
+	context.fill();
+
+}
+function finish(){
+				window.clearInterval(interval);
+				window.clearInterval(food_interval);
+}
 function Draw() {
 	canvas.width=canvas.width;
 	//game_player.innerText="player1";
@@ -112,10 +146,61 @@ function Draw() {
 			var center = new Object();
 			center.x = i * 50 + 20;
 			center.y = j * 50 + 20;
+			var noDrawYet = true;
+			if ((boardMonstar[i][j]==1)&&(board[i][j] == 1))
+			{
+				//Mimg = getRelevantMonstarImg(i,j);
+				context.drawImage(imgRobo,center.x-20,center.y-20,45,45);		
+				finish();
+			
+				window.alert("Game Lost");
+				continue;
+			}
+			if ((boardMonstar[i][j]==1)&&(noDrawYet))
+			{
+				//Mimg = getRelevantMonstarImg(i,j);
+				context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
+				continue;
+			}
+			if (board[i][j] == 1){
+				if(lastKey==1) //up
+				{
+					drawPacman(i,j, 1.65 ,1.35 ,15,5);
+				}
+				if(lastKey==2)//down
+				{
+					drawPacman(i,j, 0.65 ,0.35 ,15,-5);
+				}
+				if(lastKey==3)//left
+				{
+					drawPacman(i,j, 1.15, 1- 0.15,-5,-15);
+					
+				}
+				if(lastKey==4)//right
+				{
+					drawPacman(i,j, 0.15,1.85,5,-15);	
+				}
+				continue;
+			}
+			
+			if (board_food_surprise[i][j] == 1)
+			{
+				drawFood(center,3);
+				continue;
+			}
+				
+			if (board[i][j] > 1)
+			{
+				drawFood(center,board[i][j]-1);
+				continue;
+			}
+			
+			
+			/*
 			if (board[i][j] == 2)
 			{ 
-				if (boardMonstar[i][j] == 1)
-				{ //Monster eats Pacman
+				if (boardMonstar[i][j] == 1) //Monster eats Pacman
+				{ 
 					context.beginPath();
 					//context.arc(center.x, center.y, 10, 0, 2 * Math.PI);
 					//context.fillStyle = "red";
@@ -126,7 +211,6 @@ function Draw() {
 				}
 				else
 				{
-					//drawPacman(i,j, 0.15 + Math.PI,1.85 + Math.PI ,5,-15);
 					//Drawing Pacman according the movement
 					if(lastKey==1) //up
 					{
@@ -146,40 +230,41 @@ function Draw() {
 						drawPacman(i,j, 0.15,1.85,5,-15);	
 					}
 				}
-				/*
-				context.arc(center.x, center.y, 30, 0.15 * Math.PI, 1.85 * Math.PI); // half circle
-				context.lineTo(center.x, center.y);
-				context.fillStyle = pac_color; //color 
-				context.fill();
-				context.beginPath();
-				context.arc(center.x + 5, center.y - 15, 5, 0, 2 * Math.PI); // half circle
-				context.fillStyle = "black"; //color 
-				context.fill();
-				*/
+
 			} 
 			else
 			{
 				if (board[i][j] == 1)
 				{//Drawing the points
-					if (boardMonstar[i][j] == 1)
-					{//Monster at this point
+					if (boardMonstar[i][j] == 1) //Monster at this point
+					{
 						context.beginPath();
 						//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
 						//context.fillStyle = "red"; //color 
 						
 						context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
-						context.fill();
-					
-						context.fill(); 
+
 					}
 					else
-					{//No monster at this point
-						context.beginPath();
-						context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-						context.rect(center.x-15, center.y-15, 30 , 30); // rect
-						context.rect(center.x-7.5, center.y-20, 15 , 5); // rect
-						context.fillStyle = "red"; //color 
-						context.fill();
+					{
+						if (board_food_surprise[i][j] == 1) //surprise food at this point
+						{
+							context.beginPath();
+							//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
+							//context.fillStyle = "red"; //color 
+							
+							context.drawImage(imgFood,center.x-20,center.y-20,45,45);
+
+						}
+						else
+						{
+							//No monster or food at this point
+							context.beginPath();
+							context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
+							context.rect(center.x-15, center.y-15, 30 , 30); // rect
+							context.rect(center.x-7.5, center.y-20, 15 , 5); // rect
+							context.fillStyle = "red"; //color 
+							context.fill();
 					}
 				} 
 				else
@@ -197,6 +282,8 @@ function Draw() {
 					}
 				}
 			}
+			*/
+			
 		}
 	}
 	//code here
@@ -257,12 +344,27 @@ function UpdatePosition() {
 		}
 	}
 	
-	if(board[shape.i][shape.j]==1)
+	if(board[shape.i][shape.j]==2)
+	{
+		score++;
+	}
+	if(board[shape.i][shape.j]==3)
+	{
+		score++;
+	}
+	if(board[shape.i][shape.j]==4)
 	{
 		score++;
 	}
 	
-	board[shape.i][shape.j]=2;
+	if(board_food_surprise[shape.i][shape.j]==1)
+	{
+		score=score+100;
+		food_timer=0;
+		UpdateFoodPosition;
+	}
+	
+	board[shape.i][shape.j]=1;
 	
 //	monstarMoveMenhatten(shapeM1);
 //	monstarMoveMenhatten(shapeM2);
@@ -276,13 +378,24 @@ function UpdatePosition() {
 		monstarMoveMenhatten(shapeM1);
 		last_time_move_m1 = time_elapsed;
 	}
+	
+	//Setting the speed of food movement
+	if ((time_elapsed>=start_time_move_food)&&(food_timer==food_timer_set))
+	{
+		shapeFood.i = Math.floor((Math.random() * 9)); 
+		shapeFood.j = Math.floor((Math.random() * 9));
+		food_interval=setInterval(UpdateFoodPosition, 800);
+		food_timer--;
+	}
+
+
 	//Checking score-on-time
 	if(score>=10&&time_elapsed<=10)
 	{
 		pac_color="green";
 	}
 	//Checking game score
-	if(score==25)
+	if(score==150)
 	{
 		window.clearInterval(interval);
 		window.alert("Game completed");
@@ -292,6 +405,25 @@ function UpdatePosition() {
 		Draw();
 	}
 }
+
+function UpdateFoodPosition(){
+
+	if (food_timer==0)
+		{
+			board_food_surprise[shapeFood.i][shapeFood.j]=0;
+			shapeFood.i = Math.floor((Math.random() * 9)); 
+			shapeFood.j = Math.floor((Math.random() * 9));
+			food_timer = food_timer_set;
+			start_time_move_food = time_elapsed+food_timer_frequent;
+			window.clearInterval(food_interval);
+			
+		}else {
+			foodMoveMenhatten(shapeFood);
+			food_timer--;
+		}
+
+}
+
 
 function monstarMoveMenhatten(m){
 	boardMonstar[m.i][m.j]=0;
@@ -307,8 +439,23 @@ function monstarMoveMenhatten(m){
 	boardMonstar[m.i][m.j]=1;
 }
 
-function ShowSection(id)
-{
+function foodMoveMenhatten(m){
+	board_food_surprise[m.i][m.j]=0;
+	if (Math.abs(shape.i-m.i)>Math.abs(shape.j-m.j)){
+		if ((shape.i-m.i > 0) && (m.i>0))
+		{ m.i--;
+		}else if (m.i<9) m.i++;
+	
+	}else { if ((shape.j-m.j > 0)&&(m.j>0)){
+			m.j--;
+		}else if (m.j<9) 
+			m.j++;
+			}
+	
+	board_food_surprise[m.i][m.j]=1;
+}
+
+function ShowSection(id){
 	//hide all sections
 	var welcome = document.getElementById('welcome');
 	welcome.style.visibility="hidden";
@@ -328,8 +475,7 @@ function ShowSection(id)
 		Start();
 }
 
-function regValidate()
-{
+function regValidate(){
 //Validation of the registration form
 	var user = $("#reg_username");
 	var pass = $("#reg_password");
