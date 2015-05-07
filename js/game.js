@@ -103,7 +103,7 @@ function GetKeyPressed() {
 function Draw() {
 	canvas.width=canvas.width;
 	//game_player.innerText="player1";
-	document.getElementById("game_player").innerText="player2";
+	document.getElementById("game_player").innerText=curUser;
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
 	//var k = GetKeyPressed();
@@ -371,6 +371,7 @@ function regValidate()
 	}
 	else{
 		usersData.push({userName:user.val(),password:pass.val()});
+		ShowSection('welcome');
 		return true;
 	}
 }
@@ -386,11 +387,13 @@ function logValidate(){
 	}
 	if (isValid){
 		curUser = user.val();
-		ShowSection('game_screen');
+		ShowSection('game_setting');
 		return true;
 	}
-	alert("Invalid Username or Password.");
-	return false;
+	else{
+		alert("Invalid Username or Password.");
+		return false;
+	}
 }
 
 
