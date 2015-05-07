@@ -396,6 +396,12 @@ function logValidate(){
 	}
 }
 
+function settingValidate(){
+//Validate that at least 1 monster was chosen and set all game related variables
+	
+	
+	ShowSection('game_screen');
 
+}
 
 
