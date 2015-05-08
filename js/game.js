@@ -15,16 +15,18 @@ var time_elapsed;
 var last_time_move_m1;
 var last_time_move_m2;
 var last_time_move_m3;
+var food_interval_active;
 
 var interval;
 var M1_interval;
 var M2_interval;
 var M3_interval;
+var food_interval;
 
 var lastKey = 4;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 var curUser = "guest";
-var food_interval;
+
 
 var imgFood1;
 var shapeFood1;
@@ -54,6 +56,9 @@ var isM3;
 var BasicSpeed = 200;
 var start_time_food;
 
+var colorPart5;
+var colorPart15;
+var colorPart25;
 window.onload = function(){ 
 	context = canvas.getContext("2d");
 	shape = new Object();
@@ -80,16 +85,9 @@ window.onload = function(){
 	imgFood3 = new Image();
 	imgFood3.src = 'image/PieceOfResistance.jpg';
 	
-	last_time_move_m1 = 0;
-	last_time_move_m2 = 0;
-	last_time_move_m3 = 0;
+
+
 	
-	
-	
-	
-	
-	
-	food_timer = food_timer_set;
 	ShowSection("welcome");
 //	Start();
  }
@@ -102,17 +100,12 @@ function Start() {
 	pac_color="yellow";
 	var cnt = 10*size;
 	
-	timeGame = $("#set_time").val();
-	Level = $("#set_lego").val();
-	AmountParts = $("#set_lego").val();
-	var colorPart5 = $("#set_5pts").val();
-	var colorPart15 = $("#set_15pts").val();
-	var colorPart25 = $("#set_25pts").val();
+	last_time_move_m1 = 0;
+	last_time_move_m2 = 0;
+	last_time_move_m3 = 0;
+	food_timer = food_timer_set;
 	
-	isM1 = $("#set_mon1").is(':checked');
-	isM2 = $("#set_mon2").is(':checked');
-	isM3 = $("#set_mon3").is(':checked');
-	
+
 	brickColor = ["pink",colorPart5,colorPart15,colorPart25,"gold"];
 	var f5_remain = Math.floor(0.5*(AmountParts/10)*size);
 	var f15_remain = Math.floor(0.3*(AmountParts/10)*size);
@@ -140,7 +133,7 @@ function Start() {
 					f15_remain--;
 				}else if (randomNum <= 1.0 * f25_remain / ((AmountParts/10)*size)) {
 					board[i][j] = 4;
-					f15_remain--;
+					f25_remain--;
 					}
 			} else if ((randomNum < 1.0 * (pacman_remain + food_remain) / cnt)) {
 				shape.i=i;
@@ -201,8 +194,6 @@ function Start() {
 	if (isM1) M1_interval=setInterval(updateMonstarSmart1, BasicSpeed*5);
 	if (isM2) M2_interval=setInterval(updateMonstarSmart2, BasicSpeed*3);
 	if (isM3) M3_interval=setInterval(updateMonstarStupid, BasicSpeed*2);
-	//if (isM2) M2_interval=setInterval(updateMonstar(shapeM2,"smart"), BasicSpeed*speed);
-//	if (isM3) M3_interval=setInterval(updateMonstar(shapeM3,"stupid"), BasicSpeed*speed);
 	food_interval=setInterval(ActivateFood, 10000);
 }
 
@@ -254,7 +245,6 @@ function Draw() {
 			var Mimg = checkWhichMonsterIs(i,j);
 			if ((boardMonstar[i][j]==1)&&(board[i][j] == 1))
 			{
-				
 				context.drawImage(Mimg,center.x-20,center.y-20,45,45);		
 				finish();
 				window.alert("Game Lost");
@@ -288,7 +278,7 @@ function Draw() {
 			
 			if (board_food_surprise[i][j] == 1)
 			{
-				drawFood(center,3);
+				drawFood(center,4);
 				continue;
 			}
 				
@@ -305,7 +295,7 @@ function Draw() {
 
 function updatePosPac(){
 	board[shape.i][shape.j]=0;
-	var x = GetKeyPressed()
+	var x = GetKeyPressed();
 	//lastKey = x;
 	if(x==1 && shape.j>0) //up
 	{
@@ -336,11 +326,11 @@ function ActivateFood(){
 	start_time_food = new Date();
 	shapeFood1.i = Math.floor((Math.random() * (size-1))); 
 	shapeFood1.j = Math.floor((Math.random() * (size-1)));
-	food_interval=setInterval(UpdateFoodPosition, 800*speed);
+	food_interval_active =setInterval(UpdateFoodPosition, 800*speed);
 }
 
 function calculateScore(){
-if(board[shape.i][shape.j]==2)
+	if(board[shape.i][shape.j]==2)
 	{
 		score=score+5;
 	}
@@ -355,9 +345,8 @@ if(board[shape.i][shape.j]==2)
 	if(board_food_surprise[shape.i][shape.j]==1)
 	{
 		score=score+30;
-		window.clearInterval(food_interval);
+		window.clearInterval(food_interval_active);
 		board_food_surprise[shapeFood1.i][shapeFood1.j]=0;
-		
 	}
 }
 
@@ -377,7 +366,25 @@ function UpdatePosition() {
 
 	var currentTime=new Date();
 	time_elapsed=(currentTime-start_time)/1000;
-	Draw();
+	if(time_elapsed>timeGame){
+		finish();
+		window.alert("time is up!!!");
+	}
+	
+	if(score>=10&&time_elapsed<=10)
+	{
+		pac_color="green";
+	}
+	//Checking game score
+	if(score>=150)
+	{
+		finish();
+		window.alert("Game completed");
+	}
+	else
+	{
+		Draw();
+	}
 	//updatePosPac;
 	
 
@@ -633,6 +640,16 @@ function logValidate(){
 function settingValidate(){
 //Validate that at least 1 monster was chosen and set all game related variables
 	
+	timeGame = $("#set_time").val();
+	Level = $("#set_lego").val();
+	AmountParts = $("#set_lego").val();
+	colorPart5 = $("#set_5pts").val();
+	colorPart15 = $("#set_15pts").val();
+	colorPart25 = $("#set_25pts").val();
+	
+	isM1 = $("#set_mon1").is(':checked');
+	isM2 = $("#set_mon2").is(':checked');
+	isM3 = $("#set_mon3").is(':checked');
 	
 	ShowSection('game_screen');
 
