@@ -127,21 +127,34 @@
 			</div>
 
 			<div id="game_screen">
-				<strong>Player:</strong>
-				<label id="game_player" >player1</label>
-				<section id="game_data" vertical-align="right">
-					Score:
-					<input id="lblScore" type="text" width="15"/>
-					Time:
-					<input id="lblTime" type="text" width="15"/>
-					<br/>
-				</section>
-				<canvas id="canvas" height="500" width="500"></canvas>
+				<table>
+					<tr>
+					<td><canvas id="canvas" height="500" width="500"></canvas></td>
+					<td><section id="game_data" style="text-align:left;">
+						<label>Player:</label>
+						<label id="game_player"></label>
+						<br>
+						<label>Score:</label>
+						<input id="lblScore" type="text"/>
+						<br>
+						<label>Time:</label>
+						<input id="lblTime" type="text"/>
+						<br>
+						<label>Lives:</label>
+						<input id="lblLives" type="text"/>
+						<br>
+						<img id="btn_audio" src="image/soundOn.png" onclick="changeMusic()" style="width:40px;height:40px">
+						<br>
+						<input type="button" onclick="gameRestart()" value="Restart Game">
+						<br>
+					</section></td>
+				</table>
 			</div>
 		</content>
 		<footer>
 			Please call lior sidi!
 		</footer>
+		<audio id="game_music" preload="auto"><source src="lego.mp3" type="audio/mpeg"></audio>
     </body>
 
 </html>
