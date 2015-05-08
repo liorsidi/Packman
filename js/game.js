@@ -13,7 +13,7 @@ var time_elapsed;
 var last_time_move_m1;
 
 var interval;
-var lastKey = 4;
+var lastKey;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 var curUser = "guest";
 var food_interval;
@@ -28,6 +28,8 @@ var food_timer_set = 200;
 var food_timer;
 
 var brickColor = ["Red","blue","green","gold"];
+var game_song;
+var isMusicOn;
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
@@ -40,7 +42,7 @@ window.onload = function(){
 	imgFood.src = 'image/lordBussiness.jpg';
 //	shapeM2= new Object();
 //	shapeM3= new Object();
-	last_time_move_m1 = 0;
+//	last_time_move_m1 = 0;
 	
 	food_timer = food_timer_set;
 	ShowSection("welcome");
@@ -58,6 +60,11 @@ function Start() {
 	var pacman_remain = 1;
 	var monstar_remain = 1;
 	start_time= new Date();
+	game_song = document.getElementById("game_music");
+	game_song.play();
+	isMusicOn = true;
+	lastKey = 4;
+	last_time_move_m1 = 0;
 	//Creating the game-board and the monster-board
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
@@ -154,6 +161,7 @@ function Draw() {
 				finish();
 			
 				window.alert("Game Lost");
+				game_song.pause();
 				continue;
 			}
 			if ((boardMonstar[i][j]==1)&&(noDrawYet))
@@ -395,10 +403,11 @@ function UpdatePosition() {
 		pac_color="green";
 	}
 	//Checking game score
-	if(score==150)
+	if(score>=150)
 	{
 		window.clearInterval(interval);
 		window.alert("Game completed");
+		game_song.pause();
 	}
 	else
 	{
@@ -550,4 +559,25 @@ function settingValidate(){
 
 }
 
+function changeMusic(){
+	if (isMusicOn){
+		game_song.pause();
+		isMusicOn = false;
+		musicPic = document.getElementById("btn_audio");
+		musicPic.src = "image/soundOff.png";
+	}
+	else{
+		game_song.play();
+		isMusicOn = true;
+		musicPic = document.getElementById("btn_audio");
+		musicPic.src = "image/soundOn.png";
+	}
+}
 
+function gameRestart(){
+	finish();
+	musicPic = document.getElementById("btn_audio");
+	musicPic.src = "image/soundOn.png";
+	game_song.load();
+	Start();
+}
