@@ -199,8 +199,8 @@ function Start() {
 	Draw();
 	interval=setInterval(UpdatePosition, BasicSpeed*speed);
 	if (isM1) M1_interval=setInterval(updateMonstarSmart1, BasicSpeed*5);
-	if (isM1) M1_interval=setInterval(updateMonstarSmart2, BasicSpeed*3);
-	if (isM1) M1_interval=setInterval(updateMonstarStupid, BasicSpeed*2);
+	if (isM2) M2_interval=setInterval(updateMonstarSmart2, BasicSpeed*3);
+	if (isM3) M3_interval=setInterval(updateMonstarStupid, BasicSpeed*2);
 	//if (isM2) M2_interval=setInterval(updateMonstar(shapeM2,"smart"), BasicSpeed*speed);
 //	if (isM3) M3_interval=setInterval(updateMonstar(shapeM3,"stupid"), BasicSpeed*speed);
 	food_interval=setInterval(ActivateFood, 10000);
