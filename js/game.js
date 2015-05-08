@@ -407,37 +407,25 @@ function UpdatePosition() {
 	board[shape.i][shape.j]=0;
 	var x = GetKeyPressed()
 	//lastKey = x;
-	if(x==1) //up
+	if(x==1 && shape.j>0) //up
 	{
-		if(shape.j>0)
-		{
-			shape.j--;
-			lastKey=1;
-		}
+		shape.j--;
+		lastKey=1;
 	}
-	if(x==2) //down
+	if(x==2 && shape.j<9) //down
 	{
-		if(shape.j<9)
-		{
-			shape.j++;
-			lastKey=2;
-		}
+		shape.j++;
+		lastKey=2;
 	}
-	if(x==3) //left
+	if(x==3 && shape.i>0) //left
 	{
-		if(shape.i>0)
-		{
-			shape.i--;
-			lastKey=3;
-		}
+		shape.i--;
+		lastKey=3;
 	}
-	if(x==4) // right
+	if(x==4 && shape.i<9) // right
 	{
-		if(shape.i<9)
-		{
-			shape.i++;
-			lastKey=4;
-		}
+		shape.i++;
+		lastKey=4;
 	}
 	
 	if(board[shape.i][shape.j]==2)
@@ -477,10 +465,10 @@ function UpdatePosition() {
 		monstarMoveMenhatten(shapeM2);
 		last_time_move_m2 = time_elapsed;
 	}
-		if ((time_elapsed - last_time_move_m3 >= 0.5)&&(isM3))
+	if ((time_elapsed - last_time_move_m3 >= 0.5)&&(isM3))
 	{
 		monstarMoveStupid(shapeM3);
-		last_time_move_m3 = time_elapsed;
+		last_time_move_m1 = time_elapsed;
 	}
 	
 	//Setting the speed of food movement
@@ -531,22 +519,20 @@ function UpdateFoodPosition(){
 
 function monstarMoveMenhatten(m){
 	boardMonstar[m.i][m.j]=0;
-	mi=m.i;
-	mj=m.j;
+	var mi;
+	var mj;
 
 	if (Math.abs(shape.i-m.i)>Math.abs(shape.j-m.j)){
 		if (shape.i-m.i > 0){
-			m.i++;
-		}else m.i--;
+			mi = m.i+1;
+		}else mi = m.i-1;
 	
 	}else { if (shape.j-m.j > 0){
-			m.j++;
-		}else m.j--;
+			mj = m.j+1;
+		}else mj = m.j-1;
 	}
-	if (boardMonstar[m.i][m.j]==1){
+	if (boardMonstar[mi][mj]==0){
 		boardMonstar[mi][mj]==1;
-		m.i=mi;
-		m.j=mj;
 	}else boardMonstar[m.i][m.j]==1;
 }
 
