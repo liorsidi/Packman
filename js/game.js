@@ -17,6 +17,10 @@ var last_time_move_m2;
 var last_time_move_m3;
 
 var interval;
+var M1_interval;
+var M2_interval;
+var M3_interval;
+
 var lastKey = 4;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 var curUser = "guest";
@@ -47,6 +51,8 @@ var Level;
 var isM1;
 var isM2;
 var isM3;
+var BasicSpeed = 200;
+var start_time_food;
 
 window.onload = function(){ 
 	context = canvas.getContext("2d");
@@ -121,6 +127,8 @@ function Start() {
 		boardMonstar[i] = new Array();
 		board_food_surprise[i] = new Array();
 		for (var j = 0; j < 1*size; j++) {
+			boardMonstar[i][j]=0;
+			board_food_surprise[i][j]=0;
 			var randomNum = Math.random();
 			if (randomNum <= 1.0 * food_remain / cnt) {
 				food_remain--;
@@ -181,12 +189,21 @@ function Start() {
 	keysDown = {};
 	addEventListener("keydown", function (e) {
 		keysDown[e.keyCode] = true;
+		updatePosPac();
 	}, false);
 	addEventListener("keyup", function (e) {
 		keysDown[e.keyCode] = false;
+		updatePosPac();
 	}, false);
 	//Setting the game interval
-	interval=setInterval(UpdatePosition, 200*speed);
+	Draw();
+	interval=setInterval(UpdatePosition, BasicSpeed*speed);
+	if (isM1) M1_interval=setInterval(updateMonstarSmart1, BasicSpeed*5);
+	if (isM1) M1_interval=setInterval(updateMonstarSmart2, BasicSpeed*3);
+	if (isM1) M1_interval=setInterval(updateMonstarStupid, BasicSpeed*2);
+	//if (isM2) M2_interval=setInterval(updateMonstar(shapeM2,"smart"), BasicSpeed*speed);
+//	if (isM3) M3_interval=setInterval(updateMonstar(shapeM3,"stupid"), BasicSpeed*speed);
+	food_interval=setInterval(ActivateFood, 10000);
 }
 
 function GetKeyPressed() {
@@ -216,8 +233,13 @@ function drawFood(center,f){
 function finish(){
 				window.clearInterval(interval);
 				window.clearInterval(food_interval);
+				window.clearInterval(M1_interval);
+				window.clearInterval(M2_interval);
+				window.clearInterval(M3_interval);
+
 }
 function Draw() {
+
 	canvas.width=canvas.width;
 	//game_player.innerText="player1";
 	document.getElementById("game_player").innerText=curUser;
@@ -275,135 +297,13 @@ function Draw() {
 				drawFood(center,board[i][j]-1);
 				continue;
 			}
-			
-			
-			/*
-			if (board[i][j] == 2)
-			{ 
-				if (boardMonstar[i][j] == 1) //Monster eats Pacman
-				{ 
-					context.beginPath();
-					//context.arc(center.x, center.y, 10, 0, 2 * Math.PI);
-					//context.fillStyle = "red";
-					context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
-					context.fill();			
-					window.clearInterval(interval);
-					window.alert("Game Lost");
-				}
-				else
-				{
-					//Drawing Pacman according the movement
-					if(lastKey==1) //up
-					{
-						drawPacman(i,j, 1.65 ,1.35 ,15,5);
-					}
-					if(lastKey==2)//down
-					{
-						drawPacman(i,j, 0.65 ,0.35 ,15,-5);
-					}
-					if(lastKey==3)//left
-					{
-						drawPacman(i,j, 1.15, 1- 0.15,-5,-15);
-						
-					}
-					if(lastKey==4)//right
-					{
-						drawPacman(i,j, 0.15,1.85,5,-15);	
-					}
-				}
 
-			} 
-			else
-			{
-				if (board[i][j] == 1)
-				{//Drawing the points
-					if (boardMonstar[i][j] == 1) //Monster at this point
-					{
-						context.beginPath();
-						//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-						//context.fillStyle = "red"; //color 
-						
-						context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
-
-					}
-					else
-					{
-						if (board_food_surprise[i][j] == 1) //surprise food at this point
-						{
-							context.beginPath();
-							//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-							//context.fillStyle = "red"; //color 
-							
-							context.drawImage(imgFood,center.x-20,center.y-20,45,45);
-
-						}
-						else
-						{
-							//No monster or food at this point
-							context.beginPath();
-							context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-							context.rect(center.x-15, center.y-15, 30 , 30); // rect
-							context.rect(center.x-7.5, center.y-20, 15 , 5); // rect
-							context.fillStyle = "red"; //color 
-							context.fill();
-					}
-				} 
-				else
-				{
-					if (boardMonstar[i][j] == 1)//Only monster at this spot
-					{
-						context.beginPath();
-						//context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // half circle
-						//context.fillStyle = "red"; //color 
-						
-						context.drawImage(imgRobo,center.x-20,center.y-20,45,45);
-						context.fill();
-					
-						context.fill();
-					}
-				}
-			}
-			*/
-			
 		}
 	}
-	//code here
+	
 }
 
-function checkWhichMonsterIs(i,j){
-	if(isM1){
-		if((shapeM1.i==i)&&(shapeM1.j==j)) return imgM1;
-	}
-	if(isM2){
-		if((shapeM2.i==i)&&(shapeM2.j==j)) return imgM2;
-	}
-	if(isM3) { 
-		if((shapeM3.i==i)&&(shapeM3.j==j)) return imgM3;
-	}
-	return imgM3;
-
-}
-				
-				
-function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
-	context.beginPath();
-	var center = new Object();
-	center.x = i * 50 + 20;
-	center.y = j * 50 + 20;
-	//Pacman drawing
-	context.beginPath();
-	context.arc(center.x, center.y, 20, startMouth * Math.PI, endMouth * Math.PI); // half circle
-	context.lineTo(center.x, center.y);
-	context.fillStyle = pac_color; //color 
-	context.fill();
-	//Eye drawing
-	context.beginPath();
-	context.arc(center.x + eyeX, center.y + eyeY, 3, 0, 2 * Math.PI); // half circle
-	context.fillStyle = "black"; //color 
-	context.fill();
-}
-
-function UpdatePosition() {
+function updatePosPac(){
 	board[shape.i][shape.j]=0;
 	var x = GetKeyPressed()
 	//lastKey = x;
@@ -427,8 +327,20 @@ function UpdatePosition() {
 		shape.i++;
 		lastKey=4;
 	}
-	
-	if(board[shape.i][shape.j]==2)
+	board[shape.i][shape.j]=1;
+	calculateScore();
+	Draw();
+}
+
+function ActivateFood(){
+	start_time_food = new Date();
+	shapeFood1.i = Math.floor((Math.random() * (size-1))); 
+	shapeFood1.j = Math.floor((Math.random() * (size-1)));
+	food_interval=setInterval(UpdateFoodPosition, 800*speed);
+}
+
+function calculateScore(){
+if(board[shape.i][shape.j]==2)
 	{
 		score=score+5;
 	}
@@ -440,21 +352,40 @@ function UpdatePosition() {
 	{
 		score=score+25;
 	}
-	
 	if(board_food_surprise[shape.i][shape.j]==1)
 	{
 		score=score+30;
-		food_timer=0;
-		UpdateFoodPosition;
+		window.clearInterval(food_interval);
+		board_food_surprise[shapeFood1.i][shapeFood1.j]=0;
+		
 	}
-	
-	board[shape.i][shape.j]=1;
-	
+}
+
+function updateMonstarSmart1(){
+	monstarMoveMenhatten(shapeM1);
+	Draw();
+}
+function updateMonstarSmart2(){
+	monstarMoveMenhatten(shapeM2);
+	Draw();
+}
+function updateMonstarStupid(){
+	monstarMoveStupid(shapeM3);
+	Draw();
+}
+function UpdatePosition() {
 
 	var currentTime=new Date();
 	time_elapsed=(currentTime-start_time)/1000;
+	Draw();
+	//updatePosPac;
+	
+
+	/*
+	var currentTime=new Date();
+	time_elapsed=(currentTime-start_time)/1000;
 	//Setting the speed of monster movement
-	if ((time_elapsed - last_time_move_m1 >= 0.5)&&(isM1))
+	if ((time_elapsed - x	 >= 0.5)&&(isM1))
 	{
 		monstarMoveMenhatten(shapeM1);
 		last_time_move_m1 = time_elapsed;
@@ -496,22 +427,52 @@ function UpdatePosition() {
 	{
 		Draw();
 	}
+	*/
 }
 
-function UpdateFoodPosition(){
+function checkWhichMonsterIs(i,j){
+	if(isM1){
+		if((shapeM1.i==i)&&(shapeM1.j==j)) return imgM1;
+	}
+	if(isM2){
+		if((shapeM2.i==i)&&(shapeM2.j==j)) return imgM2;
+	}
+	if(isM3) { 
+		if((shapeM3.i==i)&&(shapeM3.j==j)) return imgM3;
+	}
+	return imgM3;
 
-	if (food_timer==0)
+}
+				
+				
+function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
+	context.beginPath();
+	var center = new Object();
+	center.x = i * 50 + 20;
+	center.y = j * 50 + 20;
+	//Pacman drawing
+	context.beginPath();
+	context.arc(center.x, center.y, 20, startMouth * Math.PI, endMouth * Math.PI); // half circle
+	context.lineTo(center.x, center.y);
+	context.fillStyle = pac_color; //color 
+	context.fill();
+	//Eye drawing
+	context.beginPath();
+	context.arc(center.x + eyeX, center.y + eyeY, 3, 0, 2 * Math.PI); // half circle
+	context.fillStyle = "black"; //color 
+	context.fill();
+}
+
+
+function UpdateFoodPosition(){
+	var currentTime=new Date();
+	if ((currentTime-start_time_food)/1000>5)
 		{
 			board_food_surprise[shapeFood1.i][shapeFood1.j]=0;
-			shapeFood1.i = Math.floor((Math.random() * (size-1))); 
-			shapeFood1.j = Math.floor((Math.random() * (size-1)));
-			food_timer = food_timer_set;
-			start_time_move_food = time_elapsed+food_timer_frequent;
 			window.clearInterval(food_interval);
 			
 		}else {
 			foodMoveMenhatten(shapeFood1);
-			food_timer--;
 		}
 
 }
@@ -519,8 +480,8 @@ function UpdateFoodPosition(){
 
 function monstarMoveMenhatten(m){
 	boardMonstar[m.i][m.j]=0;
-	var mi;
-	var mj;
+	var mi=m.i;
+	var mj=m.j;
 
 	if (Math.abs(shape.i-m.i)>Math.abs(shape.j-m.j)){
 		if (shape.i-m.i > 0){
@@ -532,8 +493,10 @@ function monstarMoveMenhatten(m){
 		}else mj = m.j-1;
 	}
 	if (boardMonstar[mi][mj]==0){
-		boardMonstar[mi][mj]==1;
-	}else boardMonstar[m.i][m.j]==1;
+		m.j = mj;
+		m.i = mi;
+	}
+	boardMonstar[m.i][m.j]=1;
 }
 
 function monstarMoveStupid(m){
