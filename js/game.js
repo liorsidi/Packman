@@ -23,7 +23,7 @@ var M2_interval;
 var M3_interval;
 var food_interval;
 
-var lastKey = 4;
+var lastKey;
 var usersData = [{userName:"p",password:"1"},{userName:"test2015",password:"1"}];
 var curUser = "guest";
 
@@ -59,6 +59,9 @@ var start_time_food;
 var colorPart5;
 var colorPart15;
 var colorPart25;
+var game_song;
+var isMusicOn;
+
 window.onload = function(){ 
 	context = canvas.getContext("2d");
 	shape = new Object();
@@ -85,11 +88,18 @@ window.onload = function(){
 	imgFood3 = new Image();
 	imgFood3.src = 'image/PieceOfResistance.jpg';
 	
-
-
-	
+	//Event listeners for key pressing
+	keysDown = {};
+	addEventListener("keydown", function (e) {
+		keysDown[e.keyCode] = true;
+		updatePosPac();
+	}, false);
+	addEventListener("keyup", function (e) {
+		keysDown[e.keyCode] = false;
+		updatePosPac();
+	}, false);
 	ShowSection("welcome");
-//	Start();
+
  }
 
 function Start() {
@@ -114,6 +124,11 @@ function Start() {
 	
 	var pacman_remain = 1;
 	start_time= new Date();
+	lastKey = 4;
+	game_song = document.getElementById("game_music");
+	game_song.play();
+	isMusicOn = true;
+
 	//Creating the game-board and the monster-board
 	for (var i = 0; i < 1*size; i++) {
 		board[i] = new Array();
@@ -166,19 +181,9 @@ function Start() {
 		shapeM3.i=size-1;
 		shapeM3.j=0;
 	}	
-	
-	
-/*	
-	//2nd monster
-	boardMonstar[9][0] = 1;
-	shapeM2.i=9;
-	shapeM2.j=0;
-	//3rd monster
-	boardMonstar[0][9] = 1;
-	shapeM3.i=0;
-	shapeM3.j=9;
-*/	
+
 	//Event listeners for key pressing
+	/*
 	keysDown = {};
 	addEventListener("keydown", function (e) {
 		keysDown[e.keyCode] = true;
@@ -187,7 +192,7 @@ function Start() {
 	addEventListener("keyup", function (e) {
 		keysDown[e.keyCode] = false;
 		updatePosPac();
-	}, false);
+	}, false);*/
 	//Setting the game interval
 	Draw();
 	interval=setInterval(UpdatePosition, BasicSpeed*speed);
@@ -222,15 +227,14 @@ function drawFood(center,f){
 
 }
 function finish(){
-				window.clearInterval(interval);
-				window.clearInterval(food_interval);
-				window.clearInterval(M1_interval);
-				window.clearInterval(M2_interval);
-				window.clearInterval(M3_interval);
-
+	window.clearInterval(interval);
+	window.clearInterval(food_interval);
+	window.clearInterval(M1_interval);
+	window.clearInterval(M2_interval);
+	window.clearInterval(M3_interval);
 }
-function Draw() {
 
+function Draw() {
 	canvas.width=canvas.width;
 	//game_player.innerText="player1";
 	document.getElementById("game_player").innerText=curUser;
@@ -248,6 +252,7 @@ function Draw() {
 				context.drawImage(Mimg,center.x-20,center.y-20,45,45);		
 				finish();
 				window.alert("Game Lost");
+				game_song.pause();
 				continue;
 			}
 			if ((boardMonstar[i][j]==1))
@@ -267,7 +272,6 @@ function Draw() {
 				if(lastKey==3)//left
 				{
 					drawPacman(i,j, 1.15, 1- 0.15,-5,-15);
-					
 				}
 				if(lastKey==4)//right
 				{
@@ -317,8 +321,8 @@ function updatePosPac(){
 		shape.i++;
 		lastKey=4;
 	}
-	board[shape.i][shape.j]=1;
 	calculateScore();
+	board[shape.i][shape.j]=1;
 	Draw();
 }
 
@@ -380,61 +384,12 @@ function UpdatePosition() {
 	{
 		finish();
 		window.alert("Game completed");
+		game_song.pause();
 	}
 	else
 	{
 		Draw();
 	}
-	//updatePosPac;
-	
-
-	/*
-	var currentTime=new Date();
-	time_elapsed=(currentTime-start_time)/1000;
-	//Setting the speed of monster movement
-	if ((time_elapsed - x	 >= 0.5)&&(isM1))
-	{
-		monstarMoveMenhatten(shapeM1);
-		last_time_move_m1 = time_elapsed;
-	}
-	
-	if ((time_elapsed - last_time_move_m2 >= 0.5)&&(isM2))
-	{
-		monstarMoveMenhatten(shapeM2);
-		last_time_move_m2 = time_elapsed;
-	}
-	if ((time_elapsed - last_time_move_m3 >= 0.5)&&(isM3))
-	{
-		monstarMoveStupid(shapeM3);
-		last_time_move_m1 = time_elapsed;
-	}
-	
-	//Setting the speed of food movement
-	if ((time_elapsed>=start_time_move_food)&&(food_timer==food_timer_set))
-	{
-		shapeFood1.i = Math.floor((Math.random() * (size-1))); 
-		shapeFood1.j = Math.floor((Math.random() * (size-1)));
-		food_interval=setInterval(UpdateFoodPosition, 800*speed);
-		food_timer--;
-	}
-
-
-	//Checking score-on-time
-	if(score>=10&&time_elapsed<=10)
-	{
-		pac_color="green";
-	}
-	//Checking game score
-	if(score==150)
-	{
-		window.clearInterval(interval);
-		window.alert("Game completed");
-	}
-	else
-	{
-		Draw();
-	}
-	*/
 }
 
 function checkWhichMonsterIs(i,j){
@@ -450,8 +405,7 @@ function checkWhichMonsterIs(i,j){
 	return imgM3;
 
 }
-				
-				
+
 function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
 	context.beginPath();
 	var center = new Object();
@@ -470,7 +424,6 @@ function drawPacman(i,j, startMouth,endMouth,eyeX, eyeY){
 	context.fill();
 }
 
-
 function UpdateFoodPosition(){
 	var currentTime=new Date();
 	if ((currentTime-start_time_food)/1000>5)
@@ -483,7 +436,6 @@ function UpdateFoodPosition(){
 		}
 
 }
-
 
 function monstarMoveMenhatten(m){
 	boardMonstar[m.i][m.j]=0;
@@ -540,13 +492,11 @@ function foodMoveMenhatten(m){
 		if ((shape.i-m.i > 0) && (m.i>0))
 		{ m.i--;
 		}else if (m.i<size-1) m.i++;
-	
 	}else { if ((shape.j-m.j > 0)&&(m.j>0)){
 			m.j--;
 		}else if (m.j<size-1) 
 			m.j++;
 			}
-	
 	board_food_surprise[m.i][m.j]=1;
 }
 
@@ -562,7 +512,6 @@ function ShowSection(id){
 	game_screen.style.visibility="hidden";
 	var game_setting = document.getElementById('game_setting');
 	game_setting.style.visibility="hidden";
-	
 	//show only one section
 	var selected = document.getElementById(id);
 	selected.style.visibility="visible";
@@ -655,4 +604,25 @@ function settingValidate(){
 
 }
 
+function changeMusic(){
+	if (isMusicOn){
+		game_song.pause();
+		isMusicOn = false;
+		musicPic = document.getElementById("btn_audio");
+		musicPic.src = "image/soundOff.png";
+	}
+	else{
+		game_song.play();
+		isMusicOn = true;
+		musicPic = document.getElementById("btn_audio");
+		musicPic.src = "image/soundOn.png";
+	}
+}
 
+function gameRestart(){
+	finish();
+	musicPic = document.getElementById("btn_audio");
+	musicPic.src = "image/soundOn.png";
+	game_song.load();
+	Start();
+}
