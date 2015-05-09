@@ -40,7 +40,7 @@ function gallery() {
 
   //if no images have the show class, grab the first image
   var current = ($('ul.slideshow li.show')?  $('ul.slideshow li.show') : $('#ul.slideshow li:first'));
-
+/*
   // trying to avoid speed issue
   if(current.queue('fx').length == 0) {
 
@@ -63,4 +63,5 @@ function gallery() {
     current.animate({opacity: 0.0}, 1000).removeClass('show');
 
   }
+  */
 }
