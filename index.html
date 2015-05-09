@@ -1,31 +1,49 @@
-<!DOCtype html>
+<!DOCTYPE html> 
 <html>
-    
-    <head>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<head>
+	  <title>Pacman</title>
+	  <meta name="description" content="website description" />
+	  <meta name="keywords" content="website keywords, website keywords" />
+	  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+	  <link rel="stylesheet" type="text/css" href="css/style.css" />
+	  <script type="text/javascript" src="js/modernizr-1.5.min.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+	  <script type="text/javascript" src="js/image_slide.js"></script>
 	</head>
-    
-    <body>
+
+	<body>
 		<header>
-			Ugly Pacman v1.1
+		  <div id="strapline">
+			<div id="welcome_slogan">
+			 <img src="image\tableau-pacman-en-briques-lego-pm.jpg"  ></img>
+			  <h3>Pacman <span>LEGO</span></h3>
+			  
+			</div><!--close welcome_slogan-->
+		  </div><!--close strapline-->	  
+		  <nav>
+			<div id="menubar">
+			  <ul id="nav">
+				<li><a onclick="ShowSection('welcome')" href="#">home</a></li>
+				<li><a onclick="ShowSection('register')" href="#">Register </a></li>
+				<li><a onclick="ShowSection('login')" href="#">Login</a></li>
+				<li><a onclick="ShowSection('game_setting')" href="#">Play</a></li>
+				<li><a onclick="ShowSection('game_setting')" href="#">About</a></li>
+			  </ul>
+			 
+			</div><!--close menubar-->	
+		  </nav>
 		</header>
-		<nav>
-		<a onclick="ShowSection('welcome')" href="#">home</a>
-		<br>
-		<a onclick="ShowSection('register')" href="#">Register </a>
-		<br>
-		<a onclick="ShowSection('login')" href="#">Login</a>
-		<br>
-		<a onclick="ShowSection('game_setting')" href="#">Settings</a>
-		</nav>
 		
 		<content>
 			
 			<div id="welcome">
-			 <p><input id="wel_reg_btn" type = "button" value = "Register" onclick="ShowSection('register')"> </p>
-			 <p><input id="wel_log_btn" type = "button" value = "Login" onclick="ShowSection('login')"></p>
+					
+		
+			 <td><a id="wel_reg_btn" value = "Register" class="myButton" align="left" onclick="ShowSection('register')" >register</a></td>
+			 <td><a id="wel_log_btn" value = "Login" class="myButton" align="left" onclick="ShowSection('login')" >login</a></td>
 			</div>
 			
 			<div id="register">
@@ -155,6 +173,7 @@
 			Please call lior sidi!
 		</footer>
 		<audio id="game_music" preload="auto"><source src="lego.mp3" type="audio/mpeg"></audio>
-    </body>
+	</body>
+
 
 </html>

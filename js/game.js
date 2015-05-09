@@ -103,13 +103,13 @@ window.onload = function(){
  }
 
 function Start() {
+	
+	score = 0;
+	pac_color="yellow";
+	
 	board = new Array();
 	boardMonstar = new Array();
 	board_food_surprise = new Array();
-	score = 0;
-	pac_color="yellow";
-	var cnt = 10*size;
-	
 	last_time_move_m1 = 0;
 	last_time_move_m2 = 0;
 	last_time_move_m3 = 0;
@@ -117,19 +117,27 @@ function Start() {
 	
 
 	brickColor = ["pink",colorPart5,colorPart15,colorPart25,"gold"];
+	
+	
+	var cnt = 10*size;
 	var f5_remain = Math.floor(0.5*(AmountParts/10)*size);
 	var f15_remain = Math.floor(0.3*(AmountParts/10)*size);
 	var f25_remain = Math.floor(0.2*(AmountParts/10)*size);
 	var food_remain = f25_remain+f15_remain+f5_remain;
 	
 	var pacman_remain = 1;
+	
+	
 	start_time= new Date();
 	lastKey = 4;
 	game_song = document.getElementById("game_music");
 	game_song.play();
 	isMusicOn = true;
-
+	game_song.pause();
+	
 	//Creating the game-board and the monster-board
+	//randomBoard();
+	
 	for (var i = 0; i < 1*size; i++) {
 		board[i] = new Array();
 		boardMonstar[i] = new Array();
@@ -161,6 +169,9 @@ function Start() {
 			cnt--;
 		}
 	}
+	
+	
+	
 	//Setting the monster's start point
 
 	
@@ -202,6 +213,72 @@ function Start() {
 	food_interval=setInterval(ActivateFood, 10000);
 }
 
+function randomBoard(){
+	
+	board = new Array();
+	boardMonstar = new Array();
+	board_food_surprise = new Array();
+	
+	var f5_remain = Math.floor(0.5*(AmountParts/10)*size);
+	var f15_remain = Math.floor(0.3*(AmountParts/10)*size);
+	var f25_remain = Math.floor(0.2*(AmountParts/10)*size);
+	var pacman_remain = 1;
+	
+	for (var i = 0; i < 1*size; i++) {
+		board[i] = new Array();
+		boardMonstar[i] = new Array();
+		board_food_surprise[i] = new Array();
+		for (var j = 0; j < 1*size; j++) {
+			boardMonstar[i][j]=0;
+			board_food_surprise[i][j]=0;
+			
+			if (f5_remain>0){
+				board[i][j]=2;
+				f5_remain--;
+				continue;
+			}
+			if (f15_remain>0){
+				board[i][j]=3;
+				f15_remain--;
+				continue;
+			}
+			if (f25_remain>0){
+				board[i][j]=4;
+				f25_remain--;
+				continue;
+			}
+			
+			if (pacman_remain>0){
+				board[i][j]=1;
+				pacman_remain--;
+				shape.i=i;
+				shape.j=j;
+				continue;
+			}
+			board[i][j]=0;
+		}
+	}
+	
+	for (var i = 0; i < 1*size*size; i++) {
+		var random1 = Math.floor((Math.random() * (size-1)));
+		var random2 = Math.floor((Math.random() * (size-1)));
+		var x = board[random1][random2];
+		var y = board[random2][random1];
+		if (x==y) continue;
+		if (x==1){
+			shape.i=random2;
+			shape.j=random1;
+		}
+		if (y==1){
+			shape.i=random1;
+			shape.j=random2;
+		}
+		board[random2][random1] = x;
+		board[random1][random1] = y;
+		
+	}
+	
+}
 function GetKeyPressed() {
 	if (keysDown[38]) {
 		return 1;
@@ -503,18 +580,25 @@ function foodMoveMenhatten(m){
 function ShowSection(id){
 	//hide all sections
 	var welcome = document.getElementById('welcome');
+	welcome.style.display="none";
 	welcome.style.visibility="hidden";
 	var register = document.getElementById('register');
+	register.style.display="none";
 	register.style.visibility="hidden";
 	var login = document.getElementById('login');
-	login.style.visibility="hidden";
+	login.style.display="none";
+	register.style.visibility="hidden";
 	var game_screen = document.getElementById('game_screen');
-	game_screen.style.visibility="hidden";
+	game_screen.style.display="none";
+	register.style.visibility="hidden";
 	var game_setting = document.getElementById('game_setting');
-	game_setting.style.visibility="hidden";
+	game_setting.style.display="none";
+	register.style.visibility="hidden";
 	//show only one section
 	var selected = document.getElementById(id);
+	selected.style.display="block";
 	selected.style.visibility="visible";
+	
 	if (id == "game_screen")
 		Start();
 }
