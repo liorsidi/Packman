@@ -1,0 +1,195 @@
+<!DOCTYPE html> 
+<html>
+
+	<head>
+	  <title>Pacman</title>
+	  <meta name="description" content="website description" />
+	  <meta name="keywords" content="website keywords, website keywords" />
+	  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+	  <link rel="stylesheet" type="text/css" href="css/style.css" />
+	  <script type="text/javascript" src="js/modernizr-1.5.min.js"></script>
+		<script src="js/game.js"></script>
+		<script src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+	  <script type="text/javascript" src="js/image_slide.js"></script>
+	</head>
+
+	<body>
+		<header>
+		  <div id="strapline">
+			<div id="welcome_slogan">
+			 <img src="image\tableau-pacman-en-briques-lego-pm.jpg"  ></img>
+			  <h3>Pacman <span>LEGO</span></h3>
+			</div><!--close welcome_slogan-->
+		  </div><!--close strapline-->	  
+		  <nav>
+			<div id="menubar">
+			<ul id="nav">
+				<li><a onclick="ShowSection('welcome')" href="#">home</a></li>
+				<li><a onclick="ShowSection('register')" href="#">Register </a></li>
+				<li><a onclick="ShowSection('login')" href="#">Login</a></li>
+				<li><a onclick="openModal()" href="#">About</a></li>
+			</ul>
+			<dialog id="aboutModal" style="position:relative; left:40%; width:375px; text-align:left; margin:10px 10px 10px 10px;">
+				<h2>Lior Sidi and Bar Belity</h2>
+				<strong>JQuery use:</strong> we used the jquery features of the selectors - $ and ID selector, in order to perform the form validations in our website.
+				<br>
+				<br>
+				<strong>Template use:</strong> we used a css template to design the pages and add some nice visual effects.
+				<br>
+				<br>
+				<strong>Difficulties:</strong> the most difficult thing was to make all the in-game intervals work together and not interfere with one-another. Eventually We managed to synchronized everything and the outcome is before you. One more difficulty was to design the pages nicely, as we are less-experienced at web designs.
+				<br>
+				<br>
+				<strong>Special Features:</strong>
+				<ul>
+				<li> We have created 3 types of monsters: 1 that moves at random, fast chasing monster and slow chasing monster.</li>
+				<li>A medicine which spawns in an interval of 30 seconds and adds 1 life when eaten!</li>
+				<li>The special-food (of 50 points) appears in an interval for only 5 seconds and then disappears, it is also running away from the player to add some spice to the game.</li>
+				</ul>
+				<button onclick="closeModal()" style="position:relative; left:45%">Close</button>
+				</dialog>
+			 
+			</div><!--close menubar-->	
+		  </nav>
+		</header>
+		
+		<content>
+			
+			<div id="welcome">
+					
+		
+			 <td><a id="wel_reg_btn" value = "Register" class="myButton" align="left" onclick="ShowSection('register')" >register</a></td>
+			 <td><a id="wel_log_btn" value = "Login" class="myButton" align="left" onclick="ShowSection('login')" >login</a></td>
+			</div>
+			
+			<div id="register">
+				<h1>Registration Page</h1>
+				<form id="reg_form" action="mailto:belity@post.bgu.ac.il" method="post">
+					<table>
+						<tr>
+							<td><label><strong>UserName:</strong></label></td>
+							<td><input id="reg_username" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Password:</strong></label></td>
+							<td><input id="reg_password" type="password" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>First Name:</label></td>
+							<td><input id="reg_fname" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Last Name:</strong></label></td>
+							<td><input id="reg_lname" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Email:</strong></label></td>
+							<td><input id="reg_email" type="email" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Date of Birth:</strong></label></td>
+							<td>
+								day-
+								<input id="reg_day" type="number" min="1" max="31" >
+								month-
+								<input id="reg_month" type="number" min="1" max="12" >
+								year-
+								<input id="reg_year" type="number" min="1900" max="2015" >
+							</td>
+						</tr>
+						<tr>
+							<td><input type="submit" onclick="return regValidate()" value="Submit"></td>
+							<td><input type="reset" value="Clear Entries"></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			
+			<div id="login">
+				<h1>Login Page</h1>
+				<form id="log_form" method="post">
+					<table>
+						<tr>
+							<td><label><strong>UserName:</strong></label></td>
+							<td><input id="log_username" type="text" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Password:</strong></label></td>
+							<td><input id="log_password" type="password" ></td>
+						</tr>
+						<tr>
+						<!--	<td><input type="submit" value="Login!"></td> -->
+						<td><input type="button" onclick="return logValidate()" value="Login!"></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			
+			<div id="game_setting">
+				<h1>Game Settings</h1>
+				<form id="setting_form">
+					<table>
+						<tr>
+							<td><label><strong>Number of Lego parts:</strong></label></td>
+							<td><input id="set_lego" type="range" min="50" max="90" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Lego colors:</strong></label></td>
+							<td><label>5 Points-</label></td>
+							<td><input id="set_5pts" type="color" value="#26D720"></td>
+							<td><label>15 Points-</label></td>
+							<td><input id="set_15pts" type="color" value="#2073D7"></td>
+							<td><label>25 Points-</label></td>
+							<td><input id="set_25pts" type="color" value="#8B3BBA"></td>
+						</tr>
+						<tr>
+							<td><label><strong>Game time:</strong></label></td>
+							<td><input id="set_time" type="range" min="60" max="180" ></td>
+						</tr>
+						<tr>
+							<td><label><strong>Choose monsters:</strong></label></td>
+							<td><input id="set_mon1" type="checkbox"><img src="image/badCop.jpg" style="height:80%;"/></td>
+							<td><input id="set_mon2" type="checkbox"><img src="image/lordBussiness.jpg" style="height:80%;"/></td>
+							<td><input id="set_mon3" type="checkbox"><img src="image/roboSwat.jpg" style="height:80%;"/></td>
+						</tr>
+						<tr>
+							<td><input type="button" onclick="return settingValidate()" value="Play Game"><td>
+						<tr>
+					</table>
+				</form>				
+			</div>
+
+			<div id="game_screen">
+				<table>
+					<tr>
+					<td><canvas id="canvas" height="500" width="500"></canvas></td>
+					<td><section id="game_data" style="text-align:left;">
+						<label>Player:</label>
+						<label id="game_player"></label>
+						<br>
+						<label>Score:</label>
+						<input id="lblScore" type="text"/>
+						<br>
+						<label>Time:</label>
+						<input id="lblTime" type="text"/>
+						<br>
+						<label>Lives:</label>
+						<label id="lblLives"></label>
+						<br>
+						<img id="btn_audio" src="image/soundOn.png" onclick="changeMusic()" style="width:40px;height:40px">
+						<img id="btn_restart" src="image/restart.png" onclick="gameRestart()" style="width:40px;height:40px">
+						<br>
+
+					</section></td>
+				</table>
+			</div>
+		</content>
+		<footer>
+			For any issue regarding the site, don't hesitate to <a class="links" href="mailto:barbq3@gmail.com">Contact Bar</a> or <a class="links" href="mailto:liorsidi@gmail.com">Contact Lior</a>
+		</footer>
+		<audio id="game_music" preload="auto"><source src="lego.mp3" type="audio/mpeg"></audio>
+	</body>
+
+
+</html>
