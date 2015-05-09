@@ -1,37 +1,71 @@
-<!DOCtype html>
+<!DOCTYPE html> 
 <html>
-    
-    <head>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<head>
+	  <title>Pacman</title>
+	  <meta name="description" content="website description" />
+	  <meta name="keywords" content="website keywords, website keywords" />
+	  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+	  <link rel="stylesheet" type="text/css" href="css/style.css" />
+	  <script type="text/javascript" src="js/modernizr-1.5.min.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+	  <script type="text/javascript" src="js/image_slide.js"></script>
 	</head>
-    
-    <body>
+
+	<body>
 		<header>
-			Ugly Pacman v1.1
+		  <div id="strapline">
+			<div id="welcome_slogan">
+			 <img src="image\tableau-pacman-en-briques-lego-pm.jpg"  ></img>
+			  <h3>Pacman <span>LEGO</span></h3>
+			</div><!--close welcome_slogan-->
+		  </div><!--close strapline-->	  
+		  <nav>
+			<div id="menubar">
+			<ul id="nav">
+				<li><a onclick="ShowSection('welcome')" href="#">home</a></li>
+				<li><a onclick="ShowSection('register')" href="#">Register </a></li>
+				<li><a onclick="ShowSection('login')" href="#">Login</a></li>
+				<li><a onclick="openModal()" href="#">About</a></li>
+			</ul>
+			<dialog id="aboutModal" style="position:relative; left:40%; width:375px; text-align:left; margin:10px 10px 10px 10px;">
+				<h2>Lior Sidi and Bar Belity</h2>
+				<strong>JQuery use:</strong> we used the jquery features of the selectors - $ and ID selector, in order to perform the form validations in our website.
+				<br>
+				<br>
+				<strong>Template use:</strong> we used a css template to design the pages and add some nice visual effects.
+				<br>
+				<br>
+				<strong>Difficulties:</strong> the most difficult thing was to make all the in-game intervals work together and not interfere with one-another. Eventually We managed to synchronized everything and the outcome is before you. One more difficulty was to design the pages nicely, as we are less-experienced at web designs.
+				<br>
+				<br>
+				<strong>Special Features:</strong>
+				<ul>
+				<li> We have created 3 types of monsters: 1 that moves at random, fast chasing monster and slow chasing monster.</li>
+				<li>A medicine which spawns in an interval of 30 seconds and adds 1 life when eaten!</li>
+				<li>The special-food (of 50 points) appears in an interval for only 5 seconds and then disappears, it is also running away from the player to add some spice to the game.</li>
+				</ul>
+				<button onclick="closeModal()" style="position:relative; left:45%">Close</button>
+				</dialog>
+			 
+			</div><!--close menubar-->	
+		  </nav>
 		</header>
-		<nav>
-		<a onclick="ShowSection('welcome')" href="#">home</a>
-		<br>
-		<a onclick="ShowSection('register')" href="#">Register </a>
-		<br>
-		<a onclick="ShowSection('login')" href="#">Login</a>
-		<br>
-		<a onclick="ShowSection('game_setting')" href="#">Settings</a>
-		</nav>
 		
 		<content>
 			
 			<div id="welcome">
-			 <p><input id="wel_reg_btn" type = "button" value = "Register" onclick="ShowSection('register')"> </p>
-			 <p><input id="wel_log_btn" type = "button" value = "Login" onclick="ShowSection('login')"></p>
+					
+		
+			 <td><a id="wel_reg_btn" value = "Register" class="myButton" align="left" onclick="ShowSection('register')" >register</a></td>
+			 <td><a id="wel_log_btn" value = "Login" class="myButton" align="left" onclick="ShowSection('login')" >login</a></td>
 			</div>
 			
 			<div id="register">
 				<h1>Registration Page</h1>
-				<!--action="mailto:belity@post.bgu.ac.il"-->
-				<form id="reg_form" method="post">
+				<form id="reg_form" action="mailto:belity@post.bgu.ac.il" method="post">
 					<table>
 						<tr>
 							<td><label><strong>UserName:</strong></label></td>
@@ -65,7 +99,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><input type="button" onclick="return regValidate()" value="Submit"></td>
+							<td><input type="submit" onclick="return regValidate()" value="Submit"></td>
 							<td><input type="reset" value="Clear Entries"></td>
 						</tr>
 					</table>
@@ -141,20 +175,21 @@
 						<input id="lblTime" type="text"/>
 						<br>
 						<label>Lives:</label>
-						<input id="lblLives" type="text"/>
+						<label id="lblLives"></label>
 						<br>
 						<img id="btn_audio" src="image/soundOn.png" onclick="changeMusic()" style="width:40px;height:40px">
+						<img id="btn_restart" src="image/restart.png" onclick="gameRestart()" style="width:40px;height:40px">
 						<br>
-						<input type="button" onclick="gameRestart()" value="Restart Game">
-						<br>
+
 					</section></td>
 				</table>
 			</div>
 		</content>
 		<footer>
-			Please call lior sidi!
+			For any issue regarding the site, don't hesitate to <a class="links" href="mailto:barbq3@gmail.com">Contact Bar</a> or <a class="links" href="mailto:liorsidi@gmail.com">Contact Lior</a>
 		</footer>
 		<audio id="game_music" preload="auto"><source src="lego.mp3" type="audio/mpeg"></audio>
-    </body>
+	</body>
+
 
 </html>
